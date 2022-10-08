@@ -1,5 +1,6 @@
 package tarea1;
 
+import java.util.ArrayList;
 import java.time.LocalDateTime;
 
 public class Tarea1 {
@@ -12,52 +13,69 @@ public class Tarea1 {
 class OrdenCompra{
     LocalDateTime fecha=LocalDateTime.now();
     private String estado;
-    Articulo aux;
     public OrdenCompra(String status){
         estado=status;
     }
     public float calcPrecioSinIVA(DetalleOrden cuant){
-        float prize=cuant.DarCant()*aux.DarPrecio();
+        float prize=cuant.calcPrecioSinIVA();
         float aux1=(prize*19)/100;
         float res=prize-aux1;
         return(res);
     }
     public float calcIVA(DetalleOrden cuant){
-        float prize=cuant.DarCant()*aux.DarPrecio();
+        float prize=cuant.calcIVA();
         float aux1=(prize*19)/100;
         float res=prize+aux1;
         return(res);
     }
     public float calcPrecio(DetalleOrden cuant){
-        return(cuant.DarCant()*aux.DarPrecio());
+        return(cuant.calcPrecio());
     }
     public float calcPeso(Articulo art,DetalleOrden cuant){
-        return(cuant.DarCant()*aux.DarPeso());
+        return(cuant.calcPeso());
+    }
+    public String dar_Estado_fecha(){
+        return(estado+fecha);
     }
     
 }
 class DetalleOrden{
     private int cantidad;
+    private float res;
     private Articulo art;
+    ArrayList<Articulo> lista_compras = new ArrayList<Articulo>();
     public DetalleOrden(int cant){
         cantidad=cant;
+        res=0;
     }
     public float calcPrecioSinIVA(){
-        float prize=cantidad*art.DarPrecio();
-        float aux=(prize*19)/100;
-        float res=prize-aux;
+        for(int i=0;i<lista_compras.size();i++){
+            art=lista_compras.get(i);
+            float prize=cantidad*art.DarPrecio();
+            float aux=(prize*19)/100;
+            res=prize-aux;
+        }
         return(res);
     }
     public float calcIVA(){
-        float prize=cantidad*art.DarPrecio();
-        float aux=(prize*19)/100;
-        float res=prize+aux;
+        for(int i=0;i<lista_compras.size();i++){
+            art=lista_compras.get(i);
+            float prize=cantidad*art.DarPrecio();
+            float aux=(prize*19)/100;
+            res=prize+aux;
+        }
         return(res);
     }
     public float calcPrecio(){
+        for(int i=0;i<lista_compras.size();i++){
+            art=lista_compras.get(i);
+        }
         return(cantidad*art.DarPrecio());
     }
     public float calcPeso(){
+        for(int i=0;i<lista_compras.size();i++){
+            art=lista_compras.get(i);
+        }
         return(cantidad*art.DarPeso());
     }
     public float DarCant(){
@@ -117,8 +135,10 @@ class Direccion{
 class DocTributario{
     private String direccion;
     private String rut;
+    private String nombre;
     LocalDateTime fecha=LocalDateTime.now();
     public DocTributario(Cliente persona,Direccion dir){
+        nombre=persona.DarNombre();
         rut=persona.DarRut();
         direccion=dir.DarDireccion();
     }
@@ -160,16 +180,18 @@ class Efectivo extends Pago{
 class Transferencia extends Pago{
     private String banco;
     private String NumCuenta;
-    public Transferencia(){
-        
+    public Transferencia(String bank,String account){
+        banco=bank;
+        NumCuenta=account;
     }
     
 }
 class Tarjeta extends Pago{
     private String tipo;
     private String numTransaccion;
-    public Tarjeta(){
-        
+    public Tarjeta(String type,String trans){
+        tipo=type;
+        numTransaccion=trans;
     }
 
     
