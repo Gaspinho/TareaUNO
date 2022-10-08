@@ -13,8 +13,8 @@ public class Tarea1 {
 class OrdenCompra{
     LocalDateTime fecha=LocalDateTime.now();
     private String estado;
-    public OrdenCompra(String status){
-        estado=status;
+    public OrdenCompra(){
+       estado="no pagado";
     }
     public float calcPrecioSinIVA(DetalleOrden cuant){
         float prize=cuant.calcPrecioSinIVA();
@@ -34,8 +34,12 @@ class OrdenCompra{
     public float calcPeso(Articulo art,DetalleOrden cuant){
         return(cuant.calcPeso());
     }
-    public String dar_Estado_fecha(){
-        return(estado+fecha);
+    public String dar_Estado(String status){
+        estado=status;
+        return(estado);
+    }
+    public LocalDateTime dar_Fecha(){
+        return(fecha);
     }
     
 }
@@ -165,6 +169,9 @@ class Pago{
     public float Pagar(){
         return monto;
     }
+    public String update_status(OrdenCompra total){
+        return total.dar_Estado("pagando");
+    }
     
 }
 class Efectivo extends Pago{
@@ -175,6 +182,10 @@ class Efectivo extends Pago{
         float vuelto=efective-super.Pagar();
         return(vuelto);
     }
+    @Override
+    public String update_status(OrdenCompra total){
+        return total.dar_Estado("pagado");
+    }
     
 }
 class Transferencia extends Pago{
@@ -184,6 +195,10 @@ class Transferencia extends Pago{
         banco=bank;
         NumCuenta=account;
     }
+    @Override
+    public String update_status(OrdenCompra total){
+        return total.dar_Estado("pagado");
+    }
     
 }
 class Tarjeta extends Pago{
@@ -192,6 +207,10 @@ class Tarjeta extends Pago{
     public Tarjeta(String type,String trans){
         tipo=type;
         numTransaccion=trans;
+    }
+    @Override
+    public String update_status(OrdenCompra total){
+        return total.dar_Estado("pagado");
     }
 
     
