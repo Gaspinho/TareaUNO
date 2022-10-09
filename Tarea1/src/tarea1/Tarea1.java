@@ -146,6 +146,9 @@ class DocTributario{
         rut=persona.DarRut();
         direccion=dir.DarDireccion();
     }
+    public String datitos(){
+        return(nombre+rut+direccion);
+    }
     
 }
 class Boleta extends DocTributario{
@@ -182,8 +185,7 @@ class Efectivo extends Pago{
         float vuelto=efective-super.Pagar();
         return(vuelto);
     }
-    @Override
-    public String update_status(OrdenCompra total){
+     public String update_status(OrdenCompra total){
         return total.dar_Estado("pagado");
     }
     
@@ -195,7 +197,6 @@ class Transferencia extends Pago{
         banco=bank;
         NumCuenta=account;
     }
-    @Override
     public String update_status(OrdenCompra total){
         return total.dar_Estado("pagado");
     }
@@ -208,10 +209,10 @@ class Tarjeta extends Pago{
         tipo=type;
         numTransaccion=trans;
     }
-    @Override
     public String update_status(OrdenCompra total){
         return total.dar_Estado("pagado");
     }
+    
 
     
 }
