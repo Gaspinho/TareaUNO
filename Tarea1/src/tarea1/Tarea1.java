@@ -6,36 +6,44 @@ import java.time.LocalDateTime;
 public class Tarea1 {
    
     public static void main(String[] args) {
+        Articulo arti=new Articulo(1,"oso","felpa",100);
+        DetalleOrden ord=new DetalleOrden(1,arti);
+        ord.añadir(1,arti);
+        OrdenCompra prueba=new OrdenCompra(ord);
+        String s=prueba.dar_Estado();
+        float value=prueba.calcPrecioSinIVA();
+        System.out.println(s);
+        System.out.println(value);
+        
         
     }
     
 }
 class OrdenCompra{
     LocalDateTime fecha=LocalDateTime.now();
-    private String estado;
-    public OrdenCompra(){
-       estado="no pagado";
+    public String estado;
+    private DetalleOrden help;
+    public OrdenCompra(DetalleOrden cuant){
+       help=cuant;
     }
-    public float calcPrecioSinIVA(DetalleOrden cuant){
-        float prize=cuant.calcPrecioSinIVA();
-        float aux1=(prize*19)/100;
-        float res=prize-aux1;
-        return(res);
+    public float calcPrecioSinIVA(){
+        return(help.calcPrecioSinIVA());
     }
-    public float calcIVA(DetalleOrden cuant){
-        float prize=cuant.calcIVA();
-        float aux1=(prize*19)/100;
-        float res=prize+aux1;
-        return(res);
+    public float calcIVA(){
+        return(help.calcIVA());
     }
-    public float calcPrecio(DetalleOrden cuant){
-        return(cuant.calcPrecio());
+    public float calcPrecio(){
+        return(help.calcPrecio());
     }
-    public float calcPeso(Articulo art,DetalleOrden cuant){
-        return(cuant.calcPeso());
+    public float calcPeso(){
+        return(help.calcPeso());
     }
-    public String dar_Estado(String status){
-        estado=status;
+    public String dar_Estado(){
+        if(estado==null){
+            estado="no pagado";
+        }else{
+            
+        }
         return(estado);
     }
     public LocalDateTime dar_Fecha(){
@@ -48,43 +56,55 @@ class DetalleOrden{
     private float res;
     private Articulo art;
     ArrayList<Articulo> lista_compras = new ArrayList<Articulo>();
-    public DetalleOrden(int cant){
+    public DetalleOrden(int cant,Articulo object){
+        for(int i=0;i<cant;i++){
+            lista_compras.add(i,object);
+        }
         cantidad=cant;
         res=0;
+    }
+    public void añadir(int x,Articulo sujeto){
+        for(int i=cantidad;i<x+1;i++){
+            lista_compras.add(sujeto);
+        }
     }
     public float calcPrecioSinIVA(){
         for(int i=0;i<lista_compras.size();i++){
             art=lista_compras.get(i);
-            float prize=cantidad*art.DarPrecio();
-            float aux=(prize*19)/100;
-            res=prize-aux;
+            float num_actual=art.DarPrecio();
+            float aux=(num_actual*19)/100;
+            float precio_objetoSiniva=num_actual-aux;
+            res=res+precio_objetoSiniva;
         }
         return(res);
     }
     public float calcIVA(){
         for(int i=0;i<lista_compras.size();i++){
             art=lista_compras.get(i);
-            float prize=cantidad*art.DarPrecio();
-            float aux=(prize*19)/100;
-            res=prize+aux;
+            float num_actual=art.DarPrecio();
+            float aux=(num_actual*19)/100;
+            float precio_objetoSiniva=num_actual-aux;
+            res=res+precio_objetoSiniva;
         }
         return(res);
     }
     public float calcPrecio(){
         for(int i=0;i<lista_compras.size();i++){
             art=lista_compras.get(i);
+            float num_actual=art.DarPrecio();
+            res=res+num_actual;
         }
-        return(cantidad*art.DarPrecio());
+        return(res);
     }
     public float calcPeso(){
         for(int i=0;i<lista_compras.size();i++){
             art=lista_compras.get(i);
+            float num_actual=art.DarPrecio();
+            res=res+num_actual;
         }
-        return(cantidad*art.DarPeso());
+        return(res);
     }
-    public float DarCant(){
-        return(cantidad);
-    }
+    
     
 }
 class Articulo{
@@ -172,8 +192,8 @@ class Pago{
     public float Pagar(){
         return monto;
     }
-    public String update_status(OrdenCompra total){
-        return total.dar_Estado("pagando");
+    public void update_status(OrdenCompra total){
+        total.estado="pagando";
     }
     
 }
@@ -185,8 +205,8 @@ class Efectivo extends Pago{
         float vuelto=efective-super.Pagar();
         return(vuelto);
     }
-     public String update_status(OrdenCompra total){
-        return total.dar_Estado("pagado");
+     public void update_status(OrdenCompra total){
+        total.estado="pagado";
     }
     
 }
@@ -197,8 +217,8 @@ class Transferencia extends Pago{
         banco=bank;
         NumCuenta=account;
     }
-    public String update_status(OrdenCompra total){
-        return total.dar_Estado("pagado");
+    public void update_status(OrdenCompra total){
+        total.estado="pagado";
     }
     
 }
@@ -209,8 +229,8 @@ class Tarjeta extends Pago{
         tipo=type;
         numTransaccion=trans;
     }
-    public String update_status(OrdenCompra total){
-        return total.dar_Estado("pagado");
+    public void update_status(OrdenCompra total){
+        total.estado="pagado";
     }
     
 
