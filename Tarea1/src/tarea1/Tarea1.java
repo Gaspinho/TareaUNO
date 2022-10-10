@@ -12,11 +12,15 @@ public class Tarea1 {
         ord.añadir(1,arti);
         OrdenCompra prueba=new OrdenCompra(ord,clit);
         String s=prueba.dar_Estado();
-        float value=prueba.calcPrecioIVA();
+        float value1=prueba.calcPrecio();
+        float value2=prueba.calcIVA();
+        float value3=prueba.calcPrecioSinIVA();
+        float value4=prueba.calcPeso();
         System.out.println(s);
-        System.out.println(value);
-        
-        
+        System.out.println(value1);
+        System.out.println(value2);
+        System.out.println(value3);
+        System.out.println(value4);   
     }
     
 }
@@ -78,7 +82,9 @@ class DetalleOrden{
             float precio_objetoSiniva=num_actual-aux;
             res=res+precio_objetoSiniva;
         }
-        return(res);
+        float y=res;
+        res=0;
+        return(y);
     }
     public float calcIVA(){
         for(int i=0;i<lista_compras.size();i++){
@@ -88,7 +94,9 @@ class DetalleOrden{
             float precio_objetoSiniva=num_actual+aux;
             res=res+precio_objetoSiniva;
         }
-        return(res);
+        float y=res;
+        res=0;
+        return(y);
     }
     public float calcPrecio(){
         for(int i=0;i<lista_compras.size();i++){
@@ -96,15 +104,19 @@ class DetalleOrden{
             float num_actual=art.DarPrecio();
             res=res+num_actual;
         }
-        return(res);
+        float y=res;
+        res=0;
+        return(y);
     }
     public float calcPeso(){
         for(int i=0;i<lista_compras.size();i++){
             art=lista_compras.get(i);
-            float num_actual=art.DarPrecio();
+            float num_actual=art.DarPeso();
             res=res+num_actual;
         }
-        return(res);
+        float y=res;
+        res=0;
+        return(y);
     }
     
     
