@@ -11,16 +11,19 @@ public class Tarea1 {
         DetalleOrden ord=new DetalleOrden(2,arti);
         ord.añadir(1,arti);
         OrdenCompra prueba=new OrdenCompra(ord,clit);
+        DocTributario doks=new DocTributario(clit);
         String s=prueba.dar_Estado();
+        String s2=doks.datitos();
         float value1=prueba.calcPrecio();
         float value2=prueba.calcIVA();
         float value3=prueba.calcPrecioSinIVA();
         float value4=prueba.calcPeso();
         System.out.println(s);
-        System.out.println(value1);
-        System.out.println(value2);
-        System.out.println(value3);
-        System.out.println(value4);   
+        System.out.println("Precio normal:"+value1);
+        System.out.println("Precio con IVA:"+value2);
+        System.out.println("Precio sin IVA:"+value3);
+        System.out.println("kg:"+value4);
+        System.out.println(s2);
     }
     
 }
@@ -177,7 +180,7 @@ class DocTributario{
         direccion=persona.DarDireccion();
     }
     public String datitos(){
-        return(nombre+rut+direccion);
+        return(nombre+" "+rut+" "+direccion);
     }
     
 }
