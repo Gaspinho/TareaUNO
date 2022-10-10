@@ -6,15 +6,19 @@ import java.time.LocalDateTime;
 public class Tarea1 {
    
     public static void main(String[] args) {
-        Cliente clit=new Cliente("gaspar","21.135.714-2","Concepcion");
+        Cliente clit=new Cliente("gaspar","21.135.714-2");
+        Direccion direc=new Direccion("concepcion");
         Articulo arti=new Articulo(1,"oso","felpa",100);
         DetalleOrden ord=new DetalleOrden(2,arti);
         ord.añadir(1,arti);
         OrdenCompra prueba=new OrdenCompra(ord,clit);
+        DocTributario docs=new DocTributario(clit,prueba,direc);
         String s=prueba.dar_Estado();
-        float value=prueba.calcPrecioSinIVA();
+        String f=docs.datitos();
+        float value=prueba.calcPeso();
         System.out.println(s);
         System.out.println(value);
+        System.out.println(f);
         
         
     }
@@ -100,7 +104,7 @@ class DetalleOrden{
     public float calcPeso(){
         for(int i=0;i<lista_compras.size();i++){
             art=lista_compras.get(i);
-            float num_actual=art.DarPrecio();
+            float num_actual=art.DarPeso();
             res=res+num_actual;
         }
         return(res);
@@ -135,17 +139,23 @@ class Articulo{
 class Cliente{
     private String nombre;
     private String rut;
-    private String direccion;
-    public Cliente(String a,String b,String c){
+
+    public Cliente(String a,String b){
         nombre=a;
         rut=b;
-        direccion=c;
     }
     public String DarNombre(){
         return nombre;
     }
     public String DarRut(){
         return rut;
+    }
+    
+}
+class Direccion{
+    private String direccion;
+    public Direccion(String s){
+        direccion=s;
     }
     public String DarDireccion(){
         return direccion;
@@ -157,14 +167,20 @@ class DocTributario{
     private String direccion;
     private String rut;
     private String nombre;
+    private OrdenCompra var;
+    
     LocalDateTime fecha=LocalDateTime.now();
-    public DocTributario(Cliente persona){
+    public DocTributario(Cliente persona,OrdenCompra total,Direccion dir){
         nombre=persona.DarNombre();
         rut=persona.DarRut();
-        direccion=persona.DarDireccion();
+        direccion=dir.DarDireccion();
+        var=total;
     }
     public String datitos(){
-        return(nombre+rut+direccion);
+        return(nombre+" "+rut+" "+direccion);
+    }
+    public float datitos_pago(){
+        return(var.calcIVA());
     }
     
 }
@@ -208,9 +224,12 @@ class Efectivo extends Pago{
 class Transferencia extends Pago{
     private String banco;
     private String NumCuenta;
-    public Transferencia(OrdenCompra total,String bank,String account){
-        banco=bank;
-        NumCuenta=account;
+    public Transferencia(OrdenCompra total){
+        super(total);
+    }
+    public void pagar(OrdenCompra total,String b,String n){
+        banco=b;
+        NumCuenta=n;
         total.estado="pagado";
     }
     
@@ -218,9 +237,12 @@ class Transferencia extends Pago{
 class Tarjeta extends Pago{
     private String tipo;
     private String numTransaccion;
-    public Tarjeta(OrdenCompra total,String type,String trans){
-        tipo=type;
-        numTransaccion=trans;
+    public Tarjeta(OrdenCompra total){
+        super(total);
+    }
+    public void pagar(OrdenCompra total,String t,String num){
+        tipo=t;
+        numTransaccion=num;
         total.estado="pagado";
     }
     
