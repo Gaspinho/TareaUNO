@@ -12,18 +12,23 @@ public class Tarea1 {
         ord.añadir(1,arti);
         OrdenCompra prueba=new OrdenCompra(ord,clit);
         DocTributario doks=new DocTributario(clit);
-        String s=prueba.dar_Estado();
         String s2=doks.datitos();
         float value1=prueba.calcPrecio();
         float value2=prueba.calcIVA();
         float value3=prueba.calcPrecioSinIVA();
         float value4=prueba.calcPeso();
-        System.out.println(s);
+        Pago sell=new Pago(prueba);
+        System.out.println(prueba.dar_Estado());
         System.out.println("Precio normal:"+value1);
         System.out.println("Precio con IVA:"+value2);
         System.out.println("Precio sin IVA:"+value3);
         System.out.println("kg:"+value4);
         System.out.println(s2);
+        System.out.println(prueba.dar_Estado()+":"+value2);
+        Efectivo luka=new Efectivo(prueba);
+        System.out.println("vuelto:"+luka.calcDevolucion(1000));
+        System.out.println(prueba.dar_Estado());
+        
     }
     
 }
@@ -50,7 +55,7 @@ class OrdenCompra{
         if(estado==null){
             estado="no pagado";
         }else{
-            
+            return(estado);
         }
         return(estado);
     }
@@ -203,17 +208,19 @@ class Pago{
     public Pago(OrdenCompra total){
         monto=total.calcIVA();
         auxi2=total;
-        total.estado="pagando";
+        auxi2.estado="pagando";
     }
     public float Pagar(){
         return monto;
+    }
+    public String estadopago(){
+        return(auxi2.estado);
     }
     
 }
 class Efectivo extends Pago{
     public Efectivo(OrdenCompra total){
         super(total);
-        auxi2=total;
     }
     public float calcDevolucion(float efective){
         float vuelto=efective-super.Pagar();
@@ -233,6 +240,10 @@ class Transferencia extends Pago{
         NumCuenta=b;
         auxi2.estado="pagado";
     }
+    public String estadopago_final(){
+        return(auxi2.estado+" "+banco+" "+NumCuenta);
+    }
+    
     
 }
 class Tarjeta extends Pago{
@@ -245,6 +256,9 @@ class Tarjeta extends Pago{
         tipo=a;
         numTransaccion=b;
         auxi2.estado="pagado";
+    }
+    public String estadopago_final(){
+        return(auxi2.estado+" "+tipo+" "+numTransaccion);
     }
     
 }
